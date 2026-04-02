@@ -7,6 +7,7 @@ const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const adminRoutes = require("./routes/admin");
+const emailingRoutes = require("./routes/emailing");
 
 const app = express();
 app.use(cors());
@@ -28,6 +29,7 @@ app.get("/health", (_req, res) => {
 app.use("/", authRoutes);
 app.use("/", userRoutes);
 app.use("/", adminRoutes);
+app.use("/", emailingRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({ message: "Route introuvable" });
