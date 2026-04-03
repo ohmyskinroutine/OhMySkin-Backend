@@ -7,6 +7,7 @@ const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const adminRoutes = require("./routes/admin");
+const routineRoutes = require("./routes/routine");
 const emailingRoutes = require("./routes/emailing");
 const stripeRoutes = require("./routes/Stripe");
 
@@ -42,6 +43,7 @@ app.use("/", userRoutes);
 app.use("/", adminRoutes);
 app.use("/", emailingRoutes);
 app.use("/", stripeRoutes);
+app.use("/", routineRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({ message: "Route introuvable" });
