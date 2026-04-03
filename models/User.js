@@ -35,6 +35,17 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    favorites: {
+      type: [
+        {
+          code: String,
+          product_name: String,
+          image: String,
+          brands: String,
+        },
+      ],
+      default: [],
+    },
   },
   { timestamps: true }
 );

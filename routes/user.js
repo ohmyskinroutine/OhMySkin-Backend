@@ -92,6 +92,48 @@ router.put(
   }
 );
 
+// GET /favorites — récupérer ses favoris
+router.get("/favorites", isAuthenticated, (req, res) => {
+  res.status(200).json({ favorites: req.user.favorites });
+});
+
+// POST /favorites — ajouter un favori
+router.post("/favorites", isAuthenticated, async (req, res) => {
+  try {
+    const { code, product_name, image, brands } = req.body;
+
+    if (!code) {
+      return res.status(400).json({ message: "Code produit manquant" });
+    }
+
+    const alreadyExists = req.user.favorites.some((f) => f.code === code);
+    if (alreadyExists) {
+      return res.status(409).json({ message: "Produit déjà en favoris" });
+    }
+
+    req.user.favorites.push({ code, product_name, image, brands });
+    await req.user.save();
+
+    res.status(200).json({ favorites: req.user.favorites });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// DELETE /favorites/:code — supprimer un favori
+router.delete("/favorites/:code", isAuthenticated, async (req, res) => {
+  try {
+    req.user.favorites = req.user.favorites.filter(
+      (f) => f.code !== req.params.code
+    );
+    await req.user.save();
+
+    res.status(200).json({ favorites: req.user.favorites });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // DELETE /user — supprimer son compte
 router.delete("/user", isAuthenticated, async (req, res) => {
   try {
