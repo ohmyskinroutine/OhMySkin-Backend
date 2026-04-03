@@ -1,33 +1,69 @@
 const { PDFDocument, StandardFonts, rgb } = require("pdf-lib");
 
-//transformer la routine en PDF telechargeable
+// transformer la routine en PDF telechargeable
 
 async function generateRoutinePdf(routine = {}) {
   const { morning = [], evening = [] } = routine;
-  //   console.log("ROUTINE =", routine);
-  //creation PDF vide
+  // console.log("ROUTINE =", routine);
+
+  // creation PDF vide
   const pdfDoc = await PDFDocument.create();
-  //Ajout d'une page format A4
+
+  // Ajout d'une page format A4
   const page = pdfDoc.addPage([595, 842]);
   const { width, height } = page.getSize();
 
-  //Polices
+  // Polices
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
   const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-  //Position portrait et ou ecrire sur la page
-  let y = height - 50;
+  // couleurs (ajout design)
+  const primary = rgb(0.2, 0.18, 0.18);
+  const accent = rgb(0.85, 0.78, 0.75);
 
-  //chaque ligne descend (sinon ça s'escrit au meme endroit)
+  //  LOGO + IMAGE (à remplacer par tes urls)
+  const logoUrl = "https://TON-LOGO-ICI.png"; //  à remplacer
+  const bannerUrl =
+    "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=1200&q=80";
+
+  // récupération des images
+  const logoBytes = await fetch(logoUrl).then((res) => res.arrayBuffer());
+  const bannerBytes = await fetch(bannerUrl).then((res) => res.arrayBuffer());
+
+  // intégration des images dans le PDF
+  const logoImage = await pdfDoc.embedPng(logoBytes);
+  const bannerImage = await pdfDoc.embedJpg(bannerBytes);
+
+  // affichage du logo
+  page.drawImage(logoImage, {
+    x: 50,
+    y: height - 80,
+    width: 100,
+    height: 40,
+  });
+
+  // affichage de la bannière
+  page.drawImage(bannerImage, {
+    x: 50,
+    y: height - 220,
+    width: 495,
+    height: 120,
+  });
+
+  // Position portrait et ou ecrire sur la page (on descend sous l'image)
+  let y = height - 250;
+
+  // chaque ligne descend (sinon ça s'ecrit au meme endroit)
   const drawLine = (text, options = {}) => {
     const {
       x = 50,
       size = 12,
       fontUsed = font,
-      color = rgb(0, 0, 0),
+      color = primary,
+      spacing = 10,
     } = options;
 
-    //fonction qui ecrit le texte sur le PDF
+    // fonction qui ecrit le texte sur le PDF
     page.drawText(text, {
       x,
       y,
@@ -36,18 +72,29 @@ async function generateRoutinePdf(routine = {}) {
       color,
     });
 
-    y -= size + 10;
+    y -= size + spacing;
   };
 
-  drawLine("Routine skincare personnalisée", {
+  //  titre principal
+  drawLine("Ta sélection skincare personnalisée", {
     size: 20,
     fontUsed: boldFont,
   });
 
-  //descend après chaque ligne
+  // descend après chaque ligne
   y -= 10;
 
-  //Gros titre en haut
+  // ligne séparatrice (design)
+  page.drawLine({
+    start: { x: 50, y },
+    end: { x: 545, y },
+    thickness: 1,
+    color: accent,
+  });
+
+  y -= 25;
+
+  //  Routine matin
   drawLine("Routine du matin", {
     size: 16,
     fontUsed: boldFont,
@@ -56,19 +103,28 @@ async function generateRoutinePdf(routine = {}) {
   if (morning.length === 0) {
     drawLine("- Aucun produit");
   } else {
-    //boucle sur les produits pour les afficher
+    // boucle sur les produits pour les afficher
     morning.forEach((product, index) => {
+      if (!product) return;
+
       drawLine(
         `${index + 1}. ${product.name || product.product_name || "Produit"}`,
+        { size: 13 },
       );
+
       if (product.brand) {
-        drawLine(`Marque : ${product.brand}`, { x: 70, size: 10 });
+        drawLine(`${product.brand}`, {
+          x: 70,
+          size: 10,
+          color: accent,
+        });
       }
     });
   }
 
-  y -= 10;
+  y -= 15;
 
+  //  Routine du soir
   drawLine("Routine du soir", {
     size: 16,
     fontUsed: boldFont,
@@ -78,17 +134,40 @@ async function generateRoutinePdf(routine = {}) {
     drawLine("- Aucun produit");
   } else {
     evening.forEach((product, index) => {
+      if (!product) return;
+
       drawLine(
         `${index + 1}. ${product.name || product.product_name || "Produit"}`,
+        { size: 13 },
       );
+
       if (product.brand) {
-        drawLine(`Marque : ${product.brand}`, { x: 70, size: 10 });
+        drawLine(`${product.brand}`, {
+          x: 70,
+          size: 10,
+          color: accent,
+        });
       }
     });
   }
-  //conversion Tableau de bytes en PDF utilisable
+
+  y -= 30;
+
+  // conseil
+  drawLine("Conseil", {
+    size: 14,
+    fontUsed: boldFont,
+  });
+
+  drawLine(
+    "Intègre progressivement les nouveaux produits pour préserver l’équilibre de ta peau.",
+    { size: 11 },
+  );
+
+  // conversion tableau de bytes en PDF utilisable
   const pdfBytes = await pdfDoc.save();
-  //transformés en buffer Node.js
+
+  // transformés en buffer Node.js
   return Buffer.from(pdfBytes);
 }
 
