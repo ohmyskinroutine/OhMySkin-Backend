@@ -6,6 +6,8 @@ async function generateRoutinePdf(routine = {}) {
   const { morning = [], evening = [] } = routine;
   // console.log("ROUTINE =", routine);
 
+  console.log("PDF generation started");
+
   // creation PDF vide
   const pdfDoc = await PDFDocument.create();
 
@@ -22,9 +24,10 @@ async function generateRoutinePdf(routine = {}) {
   const accent = rgb(0.85, 0.78, 0.75);
 
   //  LOGO + IMAGE (à remplacer par tes urls)
-  const logoUrl = "https://TON-LOGO-ICI.png"; //  à remplacer
+  const logoUrl =
+    "https://res.cloudinary.com/dxehv4yky/image/upload/v1775205815/Capture_d_e%CC%81cran_2026-04-03_a%CC%80_10.43.27_idhpkz.png";
   const bannerUrl =
-    "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=1200&q=80";
+    "https://res.cloudinary.com/dxehv4yky/image/upload/v1775205442/img-mail-pdf_j9jhit.jpg";
 
   // récupération des images
   const logoBytes = await fetch(logoUrl).then((res) => res.arrayBuffer());
