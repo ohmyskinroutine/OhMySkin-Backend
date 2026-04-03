@@ -21,7 +21,7 @@ router.post("/send-email", async (req, res) => {
     // console.log("MORNING =", routine?.morning);
     // console.log("EVENING =", routine?.evening);
 
-    //Generer PDF
+    //GENERER PDF
 
     //utilisation dun buffer pour lenvoi du pdf
     const pdfBuffer = await generateRoutinePdf(routine);
