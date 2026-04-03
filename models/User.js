@@ -35,6 +35,17 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    routine: {
+      morning: { type: [Object], default: [] },
+      evening: { type: [Object], default: [] },
+    },
+    routineHistory: [
+      {
+        morning: [Object],
+        evening: [Object],
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
     favorites: {
       type: [
         {
@@ -47,7 +58,7 @@ const userSchema = new mongoose.Schema(
       default: [],
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const User = mongoose.model("User", userSchema);

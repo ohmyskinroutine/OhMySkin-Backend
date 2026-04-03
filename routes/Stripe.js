@@ -1,13 +1,14 @@
 const express = require("express");
-const cors = require("cors");
+// const cors = require("cors");
 // Pensez à cacher votre clef privée dans votre .env
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+const router = express.Router();
+// const app = express();
+// app.use(cors());
+// app.use(express.json());
 
-app.post("/payment", async (req, res) => {
+router.post("/payment", async (req, res) => {
   try {
     // On crée une intention de paiement
     const paymentIntent = await stripe.paymentIntents.create({
@@ -25,6 +26,4 @@ app.post("/payment", async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log("Server started");
-});
+module.exports = router;
