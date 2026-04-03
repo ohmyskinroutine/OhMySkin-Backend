@@ -16,6 +16,7 @@ router.get("/profile", isAuthenticated, (req, res) => {
       _id: req.user._id,
       username: req.user.username,
       email: req.user.email,
+      avatar: req.user.avatar,
       isAdmin: req.user.isAdmin,
       createdAt: req.user.createdAt,
     },
@@ -25,7 +26,7 @@ router.get("/profile", isAuthenticated, (req, res) => {
 // PUT /user/update — modifier son compte
 router.put("/user/update", isAuthenticated, async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, avatar } = req.body;
 
     if (!username && !email && !password) {
       return res.status(400).json({ message: "Aucune donnée à mettre à jour" });
@@ -56,6 +57,8 @@ router.put("/user/update", isAuthenticated, async (req, res) => {
       req.user.password = SHA256(password + salt).toString(encBase64);
     }
 
+    if (avatar) req.user.avatar = avatar;
+
     await req.user.save();
 
     res.status(200).json({
@@ -64,6 +67,7 @@ router.put("/user/update", isAuthenticated, async (req, res) => {
         _id: req.user._id,
         username: req.user.username,
         email: req.user.email,
+        avatar: req.user.avatar,
       },
     });
   } catch (error) {
