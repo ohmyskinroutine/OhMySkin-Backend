@@ -46,6 +46,17 @@ const userSchema = new mongoose.Schema(
         createdAt: { type: Date, default: Date.now },
       },
     ],
+    favorites: {
+      type: [
+        {
+          code: String,
+          product_name: String,
+          image: String,
+          brands: String,
+        },
+      ],
+      default: [],
+    },
   },
   { timestamps: true },
 );
