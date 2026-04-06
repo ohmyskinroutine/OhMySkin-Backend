@@ -52,4 +52,27 @@ router.post("/routine/reset", optionalAuthentication, async (req, res) => {
   }
 });
 
+// Récupérer l'historique des routines (utilisateur connecté uniquement)
+router.get("/routine/history", optionalAuthentication, async (req, res) => {
+  try {
+    if (!req.user) {
+      return res
+        .status(401)
+        .json({ message: "Connecte-toi pour voir ton historique" });
+    }
+
+    // Si aucun historique
+    if (!req.user.routineHistory || req.user.routineHistory.length === 0) {
+      return res.json({ history: [] });
+    }
+
+    return res.json({
+      history: req.user.routineHistory,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+});
+
 module.exports = router;
