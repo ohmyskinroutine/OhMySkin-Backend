@@ -9,6 +9,7 @@ const userRoutes = require("./routes/user");
 const adminRoutes = require("./routes/admin");
 const routineRoutes = require("./routes/routine");
 const emailingRoutes = require("./routes/emailing");
+const rewiewRoutes = require("./routes/reviews");
 const stripeRoutes = require("./routes/Stripe");
 
 const app = express();
@@ -44,6 +45,7 @@ app.use("/", adminRoutes);
 app.use("/", emailingRoutes);
 app.use("/", stripeRoutes);
 app.use("/", routineRoutes);
+app.use("/", rewiewRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({ message: "Route introuvable" });
