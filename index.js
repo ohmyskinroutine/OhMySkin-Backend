@@ -9,6 +9,7 @@ const userRoutes = require("./routes/user");
 const adminRoutes = require("./routes/admin");
 const routineRoutes = require("./routes/routine");
 const emailingRoutes = require("./routes/emailing");
+const rewiewRoutes = require("./routes/reviews");
 
 const app = express();
 
@@ -40,8 +41,9 @@ app.get("/health", (_req, res) => {
 app.use("/", authRoutes);
 app.use("/", userRoutes);
 app.use("/", adminRoutes);
-app.use("/", emailingRoutes);
 app.use("/", routineRoutes);
+app.use("/", emailingRoutes);
+app.use("/", rewiewRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({ message: "Route introuvable" });
