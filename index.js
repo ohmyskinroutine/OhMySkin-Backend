@@ -10,6 +10,7 @@ const adminRoutes = require("./routes/admin");
 const routineRoutes = require("./routes/routine");
 const emailingRoutes = require("./routes/emailing");
 const rewiewRoutes = require("./routes/reviews");
+const stripeRoutes = require("./routes/Stripe");
 
 const app = express();
 
@@ -41,8 +42,9 @@ app.get("/health", (_req, res) => {
 app.use("/", authRoutes);
 app.use("/", userRoutes);
 app.use("/", adminRoutes);
-app.use("/", routineRoutes);
 app.use("/", emailingRoutes);
+app.use("/", stripeRoutes);
+app.use("/", routineRoutes);
 app.use("/", rewiewRoutes);
 
 app.use((_req, res) => {
