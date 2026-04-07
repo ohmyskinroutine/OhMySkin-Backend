@@ -43,4 +43,56 @@ router.post("/reviews", isAuthenticated, async (req, res) => {
   }
 });
 
+router.put("/reviews/:id", isAuthenticated, async (req, res) => {
+  try {
+    const { rating, comment } = req.body;
+
+    const review = await Review.findById(req.params.id);
+
+    if (!review) {
+      return res.status(404).json({ error: "Avis non trouvé" });
+    }
+
+    // 🔒 Vérifier que c'est le bon utilisateur
+    if (review.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        error: "Tu ne peux modifier que ton propre avis",
+      });
+    }
+
+    // ✏️ Mise à jour
+    review.rating = rating ?? review.rating;
+    review.comment = comment ?? review.comment;
+
+    await review.save();
+
+    res.json(review);
+  } catch (error) {
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
+router.delete("/reviews/:id", isAuthenticated, async (req, res) => {
+  try {
+    const review = await Review.findById(req.params.id);
+
+    if (!review) {
+      return res.status(404).json({ error: "Avis non trouvé" });
+    }
+
+    // 🔒 Vérification propriétaire
+    if (review.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        error: "Tu ne peux supprimer que ton propre avis",
+      });
+    }
+
+    await review.deleteOne();
+
+    res.json({ message: "Avis supprimé" });
+  } catch (error) {
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
 module.exports = router;
