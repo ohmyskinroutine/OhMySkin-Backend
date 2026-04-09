@@ -146,7 +146,7 @@ This project is a non-commercial educational replica of the Oh My Cream and Typo
 ## Contact
 
 GitHub:
-Eva Caruana https://github.com/kmarguiraut-sys
-Keanu Marguiraut https://github.com/Eva-caruana
+Eva Caruana https://github.com/Eva-caruana
+Keanu Marguiraut https://github.com/kmarguiraut-sys
 Margaux Mathar https://github.com/Margaux-972
 Lassana Baradji https://github.com/lassana-hub
