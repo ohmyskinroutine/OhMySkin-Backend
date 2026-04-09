@@ -16,11 +16,6 @@ router.post("/send-email", async (req, res) => {
       return res.status(400).json({ message: "Champs manquants" });
     }
 
-    // console.log("ROUTINE COMPLETE =", routine);
-    // console.log("TYPE ROUTINE =", typeof routine);
-    // console.log("MORNING =", routine?.morning);
-    // console.log("EVENING =", routine?.evening);
-
     //GENERER PDF
 
     //utilisation dun buffer pour lenvoi du pdf

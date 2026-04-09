@@ -32,7 +32,7 @@ async function generateRoutinePdf(routine = {}) {
   const { morning = [], evening = [] } = routine;
   // console.log("ROUTINE =", routine);
 
-  console.log("PDF generation started");
+  // console.log("PDF generation started");
 
   // creation PDF vide
   const pdfDoc = await PDFDocument.create();
