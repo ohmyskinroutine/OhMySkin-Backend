@@ -15,14 +15,14 @@ const stripeRoutes = require("./routes/Stripe");
 const app = express();
 
 //pour pas que le navigateur bloque mon front à envoyer la requete
-const corsOptions = {
-  origin: "http://localhost:5173",
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
+// const corsOptions = {
+//   origin: "http://localhost:5173",
+//   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+//   allowedHeaders: ["Content-Type", "Authorization"],
+// };
 
-app.use(cors(corsOptions));
-app.options(/.*/, cors(corsOptions));
+app.use(cors());
+app.options(/.*/, cors());
 
 app.use(express.json());
 
